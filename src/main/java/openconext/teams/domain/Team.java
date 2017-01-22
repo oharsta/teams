@@ -2,17 +2,14 @@ package openconext.teams.domain;
 
 
 import lombok.Getter;
-import lombok.Setter;
 import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Set;
 
 @Entity(name = "teams")
 @Getter
-@Setter
 public class Team {
 
     @Id

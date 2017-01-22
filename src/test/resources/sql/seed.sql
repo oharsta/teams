@@ -13,7 +13,7 @@ INSERT INTO `memberships` (`role`, `team_id`, `person_id`) VALUES ('MEMBER', 1, 
 INSERT INTO `memberships` (`role`, `team_id`, `person_id`) VALUES ('MANAGER', 1, 3);
 INSERT INTO `memberships` (`role`, `team_id`, `person_id`) VALUES ('ADMIN', 2, 4);
 INSERT INTO `memberships` (`role`, `team_id`, `person_id`) VALUES ('MEMBER', 2, 5);
-INSERT INTO `memberships` (`role`, `team_id`, `person_id`) VALUES ('ADMIN', 3, 4);
-INSERT INTO `memberships` (`role`, `team_id`, `person_id`) VALUES ('MEMBER', 3, 5);
+INSERT INTO `memberships` (`role`, `team_id`, `person_id`) VALUES ('ADMIN', 3, 5);
+INSERT INTO `memberships` (`role`, `team_id`, `person_id`) VALUES ('MEMBER', 3, 4);
 
 

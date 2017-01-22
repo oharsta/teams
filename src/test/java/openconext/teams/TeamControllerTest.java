@@ -1,48 +1,21 @@
 package openconext.teams;
 
-import io.restassured.RestAssured;
-import org.junit.Before;
+import openconext.teams.domain.Membership;
+import openconext.teams.domain.Role;
+import openconext.teams.domain.Team;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.embedded.LocalServerPort;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.context.jdbc.SqlConfig;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import static io.restassured.RestAssured.given;
-import static io.restassured.RestAssured.put;
+import static java.util.Comparator.naturalOrder;
+import static openconext.teams.domain.Role.*;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.*;
-import static org.springframework.test.context.jdbc.SqlConfig.ErrorMode.FAIL_ON_ERROR;
-import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, value = {"spring.profiles.active=test"})
-@Transactional
-@Sql(scripts = {"classpath:sql/clear.sql", "classpath:sql/seed.sql"},
-    config = @SqlConfig(errorMode = FAIL_ON_ERROR, transactionMode = ISOLATED))
-public class TeamControllerTest {
-
-    @LocalServerPort
-    private int serverPort;
-
-    @Value("${security.user.name}")
-    private String user;
-
-    @Value("${security.user.password}")
-    private String password;
-
-    @Value("${server.contextPath}")
-    private String contextPath;
-
-    @Before
-    public void before() throws Exception {
-        RestAssured.port = serverPort;
-    }
+public class TeamControllerTest extends AbstractApplicationTest {
 
     @Test
     public void summariesByName() throws Exception {
@@ -59,4 +32,27 @@ public class TeamControllerTest {
             .body("[1].membershipCount", equalTo(3));
     }
 
+    @Test
+    public void team() throws Exception {
+        Team team = given()
+            .auth().basic(user, password)
+            .when()
+            .get(contextPath + "/teams/1")
+            .getBody()
+            .as(Team.class);
+
+        assertEquals("riders", team.getName());
+        List<Membership> memberships = new ArrayList<>(team.getMemberships());
+        memberships.sort(naturalOrder());
+
+        assertMembership(memberships.get(0), MEMBER, "Mary Doe");
+        assertMembership(memberships.get(1), MANAGER, "William Doe");
+        assertMembership(memberships.get(2), ADMIN, "John Doe");
+    }
+
+    private void assertMembership(Membership membership, Role role, String name) {
+        assertEquals(role, membership.getRole());
+        assertEquals(name, membership.getPerson().getName());
+
+    }
 }

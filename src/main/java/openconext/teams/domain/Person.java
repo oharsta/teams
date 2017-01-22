@@ -1,17 +1,15 @@
 package openconext.teams.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Set;
 
 @Entity(name = "persons")
 @Getter
-@Setter
 public class Person {
 
     @Id
@@ -28,6 +26,7 @@ public class Person {
     private Instant created;
 
     @OneToMany(mappedBy = "person")
+    @JsonIgnore
     private Set<Membership> memberships;
 
 }
