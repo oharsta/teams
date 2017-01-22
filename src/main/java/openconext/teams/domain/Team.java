@@ -1,6 +1,5 @@
 package openconext.teams.domain;
 
-
 import lombok.Getter;
 import org.hibernate.annotations.Formula;
 

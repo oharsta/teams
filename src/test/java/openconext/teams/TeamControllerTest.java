@@ -53,6 +53,5 @@ public class TeamControllerTest extends AbstractApplicationTest {
     private void assertMembership(Membership membership, Role role, String name) {
         assertEquals(role, membership.getRole());
         assertEquals(name, membership.getPerson().getName());
-
     }
 }
