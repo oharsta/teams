@@ -14,16 +14,12 @@ import static java.util.stream.Collectors.toList;
 @RestController
 public class TeamController {
 
-    private TeamRepository teamRepository;
-
     @Autowired
-    public TeamController(TeamRepository teamRepository) {
-        this.teamRepository = teamRepository;
-    }
+    private TeamRepository teamRepository;
 
     @GetMapping("/summaries")
     public List<TeamSummary> summariesByName(@RequestParam("name") String name) {
-        return teamRepository.findByNameContainingIgnoreCase(name)
+        return teamRepository.findByNameContainingIgnoreCaseOrderByNameAsc(name)
             .map(team -> new TeamSummary(team.getId(), team.getName(), team.getMembershipCount()))
             .collect(toList());
     }

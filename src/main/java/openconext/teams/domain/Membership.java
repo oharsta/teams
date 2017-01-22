@@ -17,13 +17,14 @@ import java.time.Instant;
 public class Membership implements Serializable {
 
     @Column
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @Column
     private Instant created;
 
     @Id
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "person_id")
     private Person person;
 

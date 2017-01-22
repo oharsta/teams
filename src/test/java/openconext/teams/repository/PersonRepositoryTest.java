@@ -1,6 +1,8 @@
-package openconext.teams;
+package openconext.teams.repository;
 
+import openconext.teams.domain.Membership;
 import openconext.teams.domain.Team;
+import openconext.teams.repository.PersonRepository;
 import openconext.teams.repository.TeamRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +13,14 @@ import org.springframework.test.context.jdbc.SqlConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
+import static java.util.Comparator.naturalOrder;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.context.jdbc.SqlConfig.ErrorMode.FAIL_ON_ERROR;
 import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.ISOLATED;
@@ -20,20 +30,20 @@ import static org.springframework.test.context.jdbc.SqlConfig.TransactionMode.IS
 @Transactional
 @Sql(scripts = {"classpath:sql/clear.sql", "classpath:sql/seed.sql"},
     config = @SqlConfig(errorMode = FAIL_ON_ERROR, transactionMode = ISOLATED))
-public class TeamRepositoryTest {
+public class PersonRepositoryTest {
 
     @Autowired
-    private TeamRepository teamRepository;
+    private PersonRepository personRepository;
 
 	@Test
-	public void findByNameContaining() {
-	    assertEquals(2, teamRepository.findByNameContainingIgnoreCase("DERS").count());
-	}
+	public void findTeamsByPerson() {
+        List<String> names = personRepository.findOne(4L).getMemberships().stream()
+            .map(membership -> membership.getTeam().getName())
+            .collect(toList());
+        names.sort(naturalOrder());
 
-    @Test
-    public void membershipCount() {
-        Team team = teamRepository.findOne(1L);
-        assertEquals(3, team.getMembershipCount());
+        assertEquals(names, asList("giants", "gliders"));
+
     }
 
 
