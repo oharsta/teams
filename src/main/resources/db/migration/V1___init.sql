@@ -10,7 +10,7 @@ ALTER TABLE teams
   ADD UNIQUE INDEX teams_name_unique (name);
 
 CREATE TABLE memberships (
-  role        VARCHAR(255) NOT NULL,
+  role      VARCHAR(255) NOT NULL,
   team_id   MEDIUMINT    NOT NULL,
   person_id MEDIUMINT    NOT NULL,
   created   TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -7,8 +7,8 @@ public class MyTeamSummary extends TeamSummary implements Comparable<MyTeamSumma
 
     private Role role;
 
-    public MyTeamSummary(Long id, String name, int membershipCount, Role role) {
-        super(id, name, membershipCount);
+    public MyTeamSummary(Long id, String name, int membershipCount, String description, Role role) {
+        super(id, name, membershipCount, description);
         this.role = role;
     }
 

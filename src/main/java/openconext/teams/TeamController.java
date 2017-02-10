@@ -22,7 +22,7 @@ public class TeamController {
     @GetMapping("/summaries")
     public List<TeamSummary> summariesByName(@RequestParam("name") String name) {
         return teamRepository.findByNameContainingIgnoreCaseOrderByNameAsc(name)
-            .map(team -> new TeamSummary(team.getId(), team.getName(), team.getMembershipCount()))
+            .map(team -> new TeamSummary(team.getId(), team.getName(), team.getMembershipCount(), team.getDescription()))
             .collect(toList());
     }
 

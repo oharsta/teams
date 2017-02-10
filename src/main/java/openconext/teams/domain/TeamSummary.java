@@ -13,5 +13,5 @@ public class TeamSummary {
 
     private int membershipCount;
 
-
+    private String description;
 }

@@ -1,17 +1,16 @@
 package openconext.teams;
 
-import openconext.teams.domain.Membership;
-import openconext.teams.domain.MyTeamSummary;
-import openconext.teams.domain.Team;
-import openconext.teams.domain.TeamSummary;
+import openconext.teams.domain.*;
 import openconext.teams.repository.PersonRepository;
 import openconext.teams.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -27,7 +26,11 @@ public class PersonController {
     @GetMapping("/myTeams")
     public List<MyTeamSummary> myTeams(@RequestParam("id") Long id) {
         //TODO get the id from the logged person JWT
-        List<MyTeamSummary> myTeams = personRepository.findOne(id).getMemberships().stream()
+        Person person = personRepository.findOne(id);
+        if (person == null) {
+            return Collections.emptyList();
+        }
+        List<MyTeamSummary> myTeams = person.getMemberships().stream()
             .map(this::teamSummary)
             .collect(toList());
         myTeams.sort(naturalOrder());
@@ -36,7 +39,8 @@ public class PersonController {
 
     private MyTeamSummary teamSummary(Membership membership) {
         Team team = membership.getTeam();
-        return new MyTeamSummary(team.getId(), team.getName(), team.getMembershipCount(), membership.getRole());
+        return new MyTeamSummary(team.getId(), team.getName(),
+            team.getMembershipCount(), team.getDescription(), membership.getRole());
     }
 
 }
