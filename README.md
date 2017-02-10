@@ -22,5 +22,7 @@ grant all on teamsserver.* to 'root'@'localhost';
 
 ## Building and running
 
-http://localhost:8080/teams/api/teams/search/findByNameContaining?name=iders&projection=summary
+
+
+    curl -vik --user 'user:secret' 'http://localhost:8080/teams/api/summaries?name=e'
 
